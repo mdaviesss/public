@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<link rel="icon" href="img/1478536587.ico">
+	<script src="js/modernizr.js"></script> <!-- Modernizr -->
+  	
+	<title>Tourbus</title>
+</head>
+<body style="background-color:#5e5e5e">
+
+	<header class="cd-header">
+		<a href="login.html" class="cd-logo"><p><font color=white>Login/register</font></p></a>
+		<a href="#0" class="cd-3d-nav-trigger">
+			Menu
+			<span></span>
+		</a>
+	</header> <!-- .cd-header -->
+	
+	<main>
+	<!-- all your content here -->
+
+			<h1><strong>Offer a lift</strong></h1>
+<div class="cardiff-section" style="background-color: #dfdedc; padding: 20px; height: 1500px">
+<center>
+<!-- Google Maps API directions and waypoints documentation: https://developers.google.com/maps/documentation/javascript/examples/directions-simple-->
+<div id="map" style="width:90%"></div>
+    <div id="right-panel">
+    <div>
+    <b>Start:</b>
+    <select id="start">
+      <option value="Cardiff, UK">Cardiff, UK</option>
+      <option value="Manchester, UK">Manchester, UK</option>
+      <option value="Reading, UK">Reading, UK</option>
+      <option value="Newcastle, UK">Newcastle, UK</option>
+      <option value="Nottingham, UK">Nottingham, UK</option>
+      <option value="Exeter, UK">Exeter, UK</option>
+    </select>
+    <br>
+    <b>Offer pick-up locations:</b> <br>
+    <i>(Ctrl+Click or Cmd+Click for multiple selection)</i> <br>
+    <select multiple id="waypoints">
+      <option value="leeds, uk">Leeds, UK</option>
+      <option value="liverpool, uk">Liverpool, UK</option>
+      <option value="nottingham, uk">Nottingham, UK</option>
+      <option value="oxford, uk">Oxford, UK</option>
+      <option value="brighton, uk">Brighton</option>
+      <option value="leicester, uk">Leicester, UK</option>
+      <option value="london, uk">London, UK</option>
+    </select>
+    <br>
+    <b>End:</b>
+    <select id="end">
+      <option value="Boomtown Festival">Boomtown Festival</option>
+      <option value="Bestival, Isle of Wight">Bestival, Isle of Wight</option>
+      <option value="Download Festival">Download Festival</option>
+      <option value="Secret Garden Party">Secret Garden Party</option>
+    </select>
+    <br>
+      <input type="submit" id="submit">
+    </div>
+    <div id="directions-panel"></div>
+    </div>
+    <script>
+      function initMap() {
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 5,
+          center: {lat: 53.7603091, lng: -2.9004046}
+        });
+        directionsDisplay.setMap(map);
+
+        document.getElementById('submit').addEventListener('click', function() {
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+        });
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        var waypts = [];
+        var checkboxArray = document.getElementById('waypoints');
+        for (var i = 0; i < checkboxArray.length; i++) {
+          if (checkboxArray.options[i].selected) {
+            waypts.push({
+              location: checkboxArray[i].value,
+              stopover: true
+            });
+          }
+        }
+
+        directionsService.route({
+          origin: document.getElementById('start').value,
+          destination: document.getElementById('end').value,
+          waypoints: waypts,
+          optimizeWaypoints: true,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+            var route = response.routes[0];
+            var summaryPanel = document.getElementById('directions-panel');
+            summaryPanel.innerHTML = '';
+            // For each route, display summary information.
+            for (var i = 0; i < route.legs.length; i++) {
+              var routeSegment = i + 1;
+              summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+                  '</b><br>';
+              summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+              summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+              summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+            }
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoNGkr00B66IgsLlfEAlCXfw47bThT7QI&libraries=places&callback=initMap"
+        async defer></script>
+</center>
+<center>
+<a href="thanks.html"><button class="button" style="position: relative"><span>Offer this lift</span></button></a>
+</center>
+
+</div>
+	</main>
+	
+	<nav class="cd-3d-nav-container">
+		<ul class="cd-3d-nav">
+			<li>
+				<a href="index.html">Home</a>
+			</li>
+
+			<li>
+				<a href="about.html">About us</a>
+			</li>
+
+			<li>
+				<a href="ourfestivals.html">Festivals</a>
+			</li>
+
+			<li class="cd-selected">
+				<a href="offeralift.html">Offer a lift</a>
+			</li>
+
+			<li>
+				<a href="contact.html">Contact</a>
+			</li>
+		</ul> <!-- .cd-3d-nav -->
+
+		<span class="cd-marker color-1"></span>	
+	</nav> <!-- .cd-3d-nav-container -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="js/main.js"></script> <!-- Resource jQuery -->
+</body>
+</html>
